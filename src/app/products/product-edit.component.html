@@ -1,0 +1,59 @@
+<div class="card">
+  <div class="card-header">
+    {{ pageTitle }}
+  </div>
+</div>
+
+<div [formGroup]="productForm">
+  <div class="form-group row mb-2">
+    <label class="col-md-2 col-form-label" for="productNameId"
+      >Product Name</label
+    >
+    <div class="col-md-8">
+      <input
+        class="form-control"
+        id="productNameId"
+        type="text"
+        placeholder="Name (required)"
+        formControlName="productName"
+      />
+      <span class="invalid-feedback"> Invalid Product Name </span>
+    </div>
+  </div>
+  <div class="form-group row mb-2">
+    <label class="col-md-2 col-form-label" for="productCodeId"
+      >Product Code</label
+    >
+    <div class="col-md-8">
+      <input
+        class="form-control"
+        id="productCodeId"
+        type="text"
+        placeholder="Code (required)"
+        formControlName="productCode"
+      />
+      <span class="invalid-feedback">
+        <!-- {{ displayMessage.productCode }} -->
+      </span>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <label class="col-md-2 col-form-label" for="starRatingId"
+      >Star Rating (1-5)</label
+    >
+
+    <div class="col-md-8">
+      <input
+        class="form-control"
+        id="starRatingId"
+        type="text"
+        placeholder="Rating (1-5)"
+        formControlName="starRating"
+      />
+      <span class="invalid-feedback">
+        <!-- {{ displayMessage.starRating }} -->
+      </span>
+    </div>
+  </div>
+</div>

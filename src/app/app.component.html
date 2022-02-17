@@ -1,0 +1,23 @@
+<div style="text-align: center">
+  <!-- <h1>Welcome to {{ pageTitle }}!!</h1>
+  <pm-products></pm-products> -->
+  <nav class="navbar navbar-expand navbar-light bg-light">
+    <a class="navbar-brand" style="margin-left: 20px">{{ pageTitle }}</a>
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/welcome">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/products">Products List</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/products', '0', 'edit']"
+          >Add Product</a
+        >
+      </li>
+    </ul>
+  </nav>
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
+</div>
