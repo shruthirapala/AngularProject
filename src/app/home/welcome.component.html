@@ -1,24 +1,46 @@
 ﻿<div class="card">
   <div class="card-header">
-    {{pageTitle}}
+    {{ pageTitle }}
   </div>
   <div class="card-body">
-    <div class="container-fluid">
-      <div class="text-center">
-        <img src="./assets/images/logo.jpg"
-             class="img-responsive center-block"
-             style="max-height:300px;padding-bottom:50px" />
+    <div class="container-fluid">Simple Sign In Form</div>
+    <form nonvalidate (ngSubmit)="save(signupForm)" #signupForm="ngForm">
+      <div class="form-group row mb-2">
+        <label class="col-md-2 col-form-label">First Name</label>
+        <div class="col-md-8">
+          <input
+            type="text"
+            class="form-control"
+            id="firstNameId"
+            type="text"
+            placeholder="First Name (required)"
+            required
+            minlength="3"
+            [(ngModel)]="customer.firstName"
+            name="firstName"
+            #firstNameVar="ngModel"
+            [ngClass]="{
+              'is-invalid':
+                (firstNameVar.touched || firstNameVar.dirty) &&
+                !firstNameVar.valid
+            }"
+          />
+          <span class="invalid-feedback">
+            <span *ngIf="firstNameVar.errors?.required">
+              Please enter your first name.
+            </span>
+            <span *ngIf="firstNameVar.errors?.minlength">
+              The first name must be longer than 3 characters.
+            </span>
+          </span>
+        </div>
       </div>
 
-      <div class="text-center">Developed by:</div>
-      <div class="text-center">
-        <h3>Deborah Kurata</h3>
+      <div class="form-group row mb-2">
+        <div class="offset-md-2 col-md-4">
+          <button class="btn btn-primary mr-3" type="submit">SAVE</button>
+        </div>
       </div>
-
-      <div class="text-center">@deborahkurata</div>
-      <div class="text-center">
-        <a href="http://www.bit.ly/DeborahKsBlog">www.bit.ly/DeborahKsBlog</a>
-      </div>
-    </div>
+    </form>
   </div>
 </div>
