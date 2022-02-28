@@ -7,6 +7,8 @@ import { ProductDetailGuard } from './product-detail.guard';
 import { SharedModule } from '../shared/shared.module';
 import { ProductEditComponent } from './product-edit.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { ProductData } from './product-data';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { ReactiveFormsModule } from '@angular/forms';
       { path: 'products/:id/edit', component: ProductEditComponent },
     ]),
     SharedModule,
+
     ReactiveFormsModule,
+    InMemoryWebApiModule.forRoot(ProductData),
   ],
 })
 export class ProductModule {}

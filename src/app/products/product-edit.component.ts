@@ -18,6 +18,7 @@ import { GenericValidator } from '../shared/generic-validator';
 import { fromEvent, merge, Observable, Subscription } from 'rxjs';
 import { NumberValidators } from '../shared/number.validator';
 import { debounceTime } from 'rxjs/operators';
+import { Product } from './product';
 
 @Component({
   selector: 'pm-product-edit',
@@ -27,9 +28,10 @@ import { debounceTime } from 'rxjs/operators';
 export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
-
+  errorMessage!: string;
   productForm!: FormGroup;
   pageTitle = 'Product Edit';
+  product!: Product;
   private sub!: Subscription;
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
@@ -76,7 +78,7 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
     //Read the product Id from route parameters
     this.sub = this.route.paramMap.subscribe((params) => {
-      const id = params.get('productId');
+      const id = params.get('id');
       if (id) this.getProduct(+id);
     });
   }
@@ -105,5 +107,29 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   saveProduct() {}
   deleteProduct() {}
-  getProduct(id: number) {}
+  getProduct(id: number) {
+    this.productService.getProduct(id).subscribe({
+      next: (product: Product) => this.displayProduct(product),
+      error: (err) => (this.errorMessage = err),
+    });
+  }
+
+  displayProduct(product: Product) {
+    if (this.productForm) {
+      this.productForm.reset();
+    }
+
+    this.product = product;
+    if (this.product.id === 0) {
+      this.pageTitle = 'Add Product';
+    } else {
+      this.pageTitle = `Edit Product : ${this.product.productName}`;
+    }
+    this.productForm.patchValue({
+      productName: this.product.productName,
+      productCode: this.product.productCode,
+      starRating: this.product.starRating,
+      description: this.product.description,
+    });
+  }
 }
