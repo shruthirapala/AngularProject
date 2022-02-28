@@ -5,7 +5,20 @@ import {
   FormGroup,
   FormBuilder,
   Validators,
+  AbstractControl,
 } from '@angular/forms';
+
+function emailMatcher(c: AbstractControl): { [key: string]: boolean } | null {
+  const emailControl = c.get('email');
+  const confirmEmailControl = c.get('confirmEmail');
+  if (emailControl?.pristine === confirmEmailControl?.pristine) {
+    return null;
+  }
+  if (emailControl?.value === confirmEmailControl?.value) {
+    return null;
+  }
+  return { match: true };
+}
 
 @Component({
   templateUrl: './welcome.component.html',
@@ -21,7 +34,14 @@ export class WelcomeComponent implements OnInit {
     this.customerForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(3)]],
       lastName: ['', [Validators.required, Validators.maxLength(20)]],
-      email: ['', Validators.required],
+      emailGroup: this.fb.group(
+        {
+          email: ['', [Validators.required, Validators.email]],
+          confirmEmail: ['', Validators.required],
+        },
+        { validator: emailMatcher }
+      ),
+
       phone: [''],
       notification: 'email',
       sendCatalog: true,
