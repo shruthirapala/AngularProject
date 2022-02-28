@@ -133,13 +133,35 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
   saveProduct() {
     if (this.productForm.valid) {
       const p = { ...this.product, ...this.productForm.value };
-      // if(p.id === 0){
-      //   this.productService.
-      // }
+      if (p.id === 0) {
+        this.productService.createProduct(p).subscribe({
+          next: () => this.onSaveComplete(),
+          error: (err) => (this.errorMessage = err),
+        });
+      }
       this.productService.updateProduct(p).subscribe({
         next: () => this.onSaveComplete(),
         error: (err) => (this.errorMessage = err),
       });
+    }
+  }
+
+  deleteProduct(): void {
+    if (this.product.id === 0) {
+      this.onSaveComplete();
+    } else {
+      if (
+        confirm(
+          `Are you sure you want to delete this product : ${this.product.productName}`
+        )
+      ) {
+        if (this.product.id) {
+          this.productService.deleteProduct(this.product.id).subscribe({
+            next: () => this.onSaveComplete(),
+            error: (err) => (this.errorMessage = err),
+          });
+        }
+      }
     }
   }
 
@@ -148,5 +170,4 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.productForm.reset();
     this.router.navigate(['/products']);
   }
-  deleteProduct() {}
 }
