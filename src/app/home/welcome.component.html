@@ -70,22 +70,11 @@
               placeholder="Email (required)"
               formControlName="email"
               [ngClass]="{
-                'is-invalid':
-                  customerForm.get('emailGroup')?.errors ||
-                  ((customerForm.get('emailGroup.email')?.touched ||
-                    customerForm.get('emailGroup.email')?.dirty) &&
-                    !customerForm.get('emailGroup.email')?.valid)
+                'is-invalid': emailMessage
               }"
             />
             <span class="invalid-feedback">
-              <span
-                *ngIf="customerForm.get('emailGroup.email')?.errors?.required"
-              >
-                Please enter your Email Address.
-              </span>
-            </span>
-            <span *ngIf="customerForm.get('emailGroup.email')?.errors?.email">
-              Please enter a valid Email Address
+              {{ emailMessage }}
             </span>
           </div>
         </div>
@@ -109,7 +98,9 @@
                     !customerForm.get('emailGroup.confirmEmail')?.valid)
               }"
             />
+
             <span class="invalid-feedback">
+              {{ customerForm.get("emailGroup")?.errors | json }}
               <span
                 *ngIf="
                   customerForm.get('emailGroup.confirmEmail')?.errors?.required
@@ -117,6 +108,7 @@
               >
                 Please confirm your email address.
               </span>
+
               <span *ngIf="customerForm.get('emailGroup')?.errors?.match">
                 The confirmation does not match the email address.
               </span>
@@ -154,7 +146,6 @@
                 type="radio"
                 value="email"
                 formControlName="notification"
-                (click)="setNotification('email')"
               />Email
             </label>
           </div>
@@ -165,7 +156,6 @@
                 type="radio"
                 value="text"
                 formControlName="notification"
-                (click)="setNotification('text')"
               />Text
             </label>
           </div>

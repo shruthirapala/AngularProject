@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Customer } from './welcome.model';
 import {
-  FormControl,
   FormGroup,
   FormBuilder,
   Validators,
@@ -11,9 +10,7 @@ import {
 function emailMatcher(c: AbstractControl): { [key: string]: boolean } | null {
   const emailControl = c.get('email');
   const confirmEmailControl = c.get('confirmEmail');
-  if (emailControl?.pristine === confirmEmailControl?.pristine) {
-    return null;
-  }
+
   if (emailControl?.value === confirmEmailControl?.value) {
     return null;
   }
@@ -27,6 +24,12 @@ export class WelcomeComponent implements OnInit {
   customerForm!: FormGroup;
   customer = new Customer();
   public pageTitle = 'Sign In Form';
+  emailMessage!: string;
+
+  private validationMessages: Record<string, string> = {
+    required: 'Please enter your email address',
+    email: 'Please enter a valid email address',
+  };
 
   constructor(private fb: FormBuilder) {}
 
@@ -46,10 +49,28 @@ export class WelcomeComponent implements OnInit {
       notification: 'email',
       sendCatalog: true,
     });
+
+    this.customerForm
+      .get('notification')
+      ?.valueChanges.subscribe((value) => this.setNotification(value));
+
+    const emailControl = this.customerForm.get('emailGroup.email');
+    emailControl?.valueChanges.subscribe((value) =>
+      this.setMessage(emailControl)
+    );
   }
 
   save() {
     console.log(this.customerForm);
+  }
+
+  setMessage(c: AbstractControl): void {
+    this.emailMessage = '';
+    if ((c.touched || c.dirty) && c.errors) {
+      this.emailMessage = Object.keys(c.errors)
+        .map((key) => this.validationMessages[key])
+        .join(' ');
+    }
   }
 
   setNotification(notifyVia: string): void {
