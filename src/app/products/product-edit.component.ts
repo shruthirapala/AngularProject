@@ -19,6 +19,7 @@ import { fromEvent, merge, Observable, Subscription } from 'rxjs';
 import { NumberValidators } from '../shared/number.validator';
 import { debounceTime } from 'rxjs/operators';
 import { Product } from './product';
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'pm-product-edit',
@@ -40,7 +41,8 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private productService: ProductService
+    private productService: ProductService,
+    private router: Router
   ) {
     // Defines all of the validation messages for the form.
     this.validationMessages = {
@@ -93,9 +95,6 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
     const controlBlurs: Observable<any>[] = this.formInputElements.map(
       (formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur')
     );
-
-    // Merge the blur event observable with the valueChanges observable
-    // so we only need to subscribe once.
     merge(this.productForm.valueChanges, ...controlBlurs)
       .pipe(debounceTime(800))
       .subscribe((value) => {
@@ -105,8 +104,6 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  saveProduct() {}
-  deleteProduct() {}
   getProduct(id: number) {
     this.productService.getProduct(id).subscribe({
       next: (product: Product) => this.displayProduct(product),
@@ -132,4 +129,24 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
       description: this.product.description,
     });
   }
+
+  saveProduct() {
+    if (this.productForm.valid) {
+      const p = { ...this.product, ...this.productForm.value };
+      // if(p.id === 0){
+      //   this.productService.
+      // }
+      this.productService.updateProduct(p).subscribe({
+        next: () => this.onSaveComplete(),
+        error: (err) => (this.errorMessage = err),
+      });
+    }
+  }
+
+  onSaveComplete() {
+    // reset the form and navigate to products page
+    this.productForm.reset();
+    this.router.navigate(['/products']);
+  }
+  deleteProduct() {}
 }
