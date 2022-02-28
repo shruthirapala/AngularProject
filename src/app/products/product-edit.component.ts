@@ -16,13 +16,23 @@ export class ProductEditComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private productService: ProductService
-  ) {}
+  ) {
+    // Defines all of the validation messages for the form.
+  }
 
   ngOnInit(): void {
     this.productForm = this.fb.group({
-      productName: ['', [Validators.required, Validators.minLength(3)]],
+      productName: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(50),
+        ],
+      ],
       productCode: ['', Validators.required],
       starRating: ['', Validators.required],
+      Discription: '',
     });
 
     // Reacd the product Id from route parameters
@@ -31,4 +41,7 @@ export class ProductEditComponent implements OnInit {
     //   this.getProduct(id); //
     // });
   }
+
+  saveProduct() {}
+  deleteProduct() {}
 }

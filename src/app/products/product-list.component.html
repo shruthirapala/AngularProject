@@ -64,6 +64,14 @@
                 >
                 </pm-star>
               </td>
+              <td>
+                <button
+                  class="btn btn-outline-primary btn-small"
+                  [routerLink]="['/products', product.productId, 'edit']"
+                >
+                  Edit
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>
